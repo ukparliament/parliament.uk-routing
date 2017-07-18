@@ -25,19 +25,14 @@ backend things {
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
 sub vcl_recv {
-    # Default to the list backend
-    set req.backend_hint = lists;
-
     if(req.url == "/" || req.url ~ "^/resources" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes") {
         set req.backend_hint = utilities;
-    }
-
-    if(req.url ~ "(people|constituencies|parties)/%w{8}$") {
+    } else if(req.url ~ "(people|constituencies|parties)/\w{8}$") {
         set req.backend_hint = things;
-    }
-
-    if(req.url ~ "(.ico|.jpeg|.gif)$") {
+    } else if(req.url ~ "(.ico|.jpeg|.gif)$") {
         set req.backend_hint = utilities;
+    } else {
+        set req.backend_hint = lists;
     }
 }
 #

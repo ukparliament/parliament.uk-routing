@@ -1,0 +1,79 @@
+version: "3"
+services:
+  varnish.parliament.local:
+    build:
+      context: .
+    ports:
+      - '80:80'
+    command: 'sh /scripts/start.sh'
+    environment:
+      - UTILITIES_BACKEND_IP=utilities.parliament.local
+      - UTILITIES_BACKEND_PORT=3000
+      - LIST_BACKEND_IP=list.parliament.local
+      - LIST_BACKEND_PORT=3000
+      - THING_BACKEND_IP=thing.parliament.local
+      - THING_BACKEND_PORT=3000
+    depends_on:
+      - utilities.parliament.local
+      - list.parliament.local
+      - thing.parliament.local
+
+  utilities.parliament.local:
+    build:
+      context: ../parliament.uk-utilities/
+      args:
+        RACK_ENV: development
+    volumes:
+      - ../parliament.uk-utilities/:/app
+      - /app/vendor/bundle/
+      - /app/tmp/
+    command: 'bundle exec rails s -b 0.0.0.0 -p 3000'
+    ports:
+      - '3000:3000'
+    environment:
+      - PARLIAMENT_BASE_URL
+      - PARLIAMENT_AUTH_KEY
+      - BANDIERA_URL
+      - ASSET_LOCATION_URL
+      - GTM_KEY
+      - RACK_ENV=development
+
+  list.parliament.local:
+    build:
+      context: ../parliament.uk-lists/
+      args:
+        RACK_ENV: development
+    volumes:
+      - ../parliament.uk-lists/:/app
+      - /app/vendor/bundle/
+      - /app/tmp/
+    command: 'bundle exec rails s -b 0.0.0.0 -p 3000'
+    ports:
+      - '3010:3000'
+    environment:
+      - PARLIAMENT_BASE_URL
+      - PARLIAMENT_AUTH_KEY
+      - BANDIERA_URL
+      - ASSET_LOCATION_URL
+      - GTM_KEY
+      - RACK_ENV=development
+
+  thing.parliament.local:
+    build:
+      context: ../parliament.uk-things/
+      args:
+        RACK_ENV: development
+    volumes:
+      - ../parliament.uk-things/:/app
+      - /app/vendor/bundle/
+      - /app/tmp/
+    command: 'bundle exec rails s -b 0.0.0.0 -p 3000'
+    ports:
+      - '3020:3000'
+    environment:
+      - PARLIAMENT_BASE_URL
+      - PARLIAMENT_AUTH_KEY
+      - BANDIERA_URL
+      - ASSET_LOCATION_URL
+      - GTM_KEY
+      - RACK_ENV=development
