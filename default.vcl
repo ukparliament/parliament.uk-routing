@@ -25,9 +25,17 @@ backend things {
 # redefine any of these subroutines, the built-in logic will be
 # appended to your code.
 sub vcl_recv {
-    if(req.url == "/" || req.url ~ "^/resources" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes") {
+    if(req.url == "/" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes") {
         set req.backend_hint = utilities;
-    } else if(req.url ~ "(people|constituencies|parties)/\w{8}$") {
+    } else if(req.url ~ "(people|constituencies|parties|parliaments|media)/\w{8}$") {
+        set req.backend_hint = things;
+    } else if(req.url ~ "(parliaments)/\w{8}/(previous|next)$") {
+        set req.backend_hint = things;
+    } else if(req.url ~ "(parliaments/(current|next|previous))$") {
+        set req.backend_hint = things;
+    } else if(req.url ~ "(contituencies/map)$") {
+        set req.backend_hint = things;
+    } else if(req.url ~ "(constituencies)/\w{8}/(map)$") {
         set req.backend_hint = things;
     } else if(req.url ~ "(.ico|.jpeg|.gif)$") {
         set req.backend_hint = utilities;
