@@ -1,8 +1,8 @@
 
-# Parliament.uk-routing-prototype
-[Parliament.uk-routing-prototype][parliament.uk-routing-prototype] is a [Varnish][varnish] application designed to replicate the routing of the [Application Load Balancer][alb] in the development environment. It handles the routing between the three applications that make up the new [parliament.uk][parliament.uk] website made by the [Parliamentary Digital Service][parliamentary-digital-service].
+# parliament.uk-routing
+[Parliament.uk-routing][parliament.uk-routing] is a [Varnish][varnish] application designed to replicate the routing of the [Application Load Balancer][alb] in the development environment. It handles the routing between the three applications that make up the new [parliament.uk][parliament.uk] website made by the [Parliamentary Digital Service][parliamentary-digital-service].
 
-The [Parliament.uk-routing-prototype][parliament.uk-routing-prototype] application routes between the [Utilities][utilities], [Things][things] and [Lists][lists] applications based on the url route, following the rules of the [Varnish][varnish] regex in the `default.vcl` file.
+The [parliament.uk-routing][parliament.uk-routing] application routes between the [Utilities][utilities], [Things][things] and [Lists][lists] applications based on the url route, following the rules of the [Varnish][varnish] regex in the `default.vcl` file.
 
 ### Contents
 - [Requirements](#requirements)
@@ -13,24 +13,27 @@ The [Parliament.uk-routing-prototype][parliament.uk-routing-prototype] applicati
 - [License](#license)
 
 ## Requirements
-[Parliament.uk-routing-prototype][parliament.uk-routing-prototype] requires [Docker][docker].
+[Parliament.uk-routing][parliament.uk-routing] requires [Docker][docker].
 
 You will also need to have cloned the [Utilities][utilities], [Things][things] and [Lists][lists] applications locally, within the same directory.
 
 
 ## Getting Started
-In this application, [Docker][docker] is dependent on the three rails applications all sitting in the same folder as the [Parliament.uk-routing-prototype][parliament.uk-routing-prototype] application, so make sure to clone the repository in the same directory as [Utilities][utilities], [Things][things] and [Lists][lists]. Your folder structure should look like this:
+In this application, [Docker][docker] is dependent on the three rails applications all sitting in the same folder as the [Parliament.uk-routing][parliament.uk-routing] application, so make sure to clone the repository in the same directory as [Utilities][utilities], [Things][things] and [Lists][lists]. Your folder structure should look like this:
 ```bash
 /example_folder
     /parliament.uk-lists
     /parliament.uk-utilities
     /parliament.uk-things
-    /parliament.uk-routing-prototype
+    /parliament.uk-routing
 ```
+
+You will need environment variables set up locally in order to run the application.
+
 Clone the repository locally using:
 ```bash
-git clone https://github.com/ukparliament/Parliament.uk-routing-prototype.git
-cd Parliament.uk-routing-prototype
+git clone https://github.com/ukparliament/parliament.uk-routing.git
+cd parliament.uk-routing
 ```
 
 ## Running the application
@@ -46,9 +49,9 @@ Once docker has stored these images and containers, you can restart the applicat
 docker-compose up
 ```
 
-The application will then be available from http://localhost:80, and the [Parliament.uk-routing-prototype][parliament.uk-routing-prototype] will automatically route to the three rails applications at http://localhost:3000.
+The application will then be available from http://localhost:80, and the [Parliament.uk-routing][parliament.uk-routing] will automatically route to the three rails applications at http://localhost:3000.
 
-If changes are made to the Gemfile of the three rails applications or to the `default.vcl` file within the [Parliament.uk-routing-prototype][parliament.uk-routing-prototype], you may need to rebuild Docker's images. In order to do this you can remove containers:
+If changes are made to the Gemfile of the three rails applications or to the `default.vcl` file within the [Parliament.uk-routing][parliament.uk-routing], you may need to rebuild Docker's images. In order to do this you can remove containers:
 ```bash
 docker rm name_of_container
 ```
@@ -77,9 +80,9 @@ If you wish to submit a bug fix or feature, you can create a pull request and it
 5. Create a new Pull Request
 
 ## License
-[Parliament.uk-routing-prototype][parliament.uk-routing-prototype] is available as open source under the terms of the [Open Parliament Licence][info-license].
+[Parliament.uk-routing][parliament.uk-routing] is available as open source under the terms of the [Open Parliament Licence][info-license].
 
-[parliament.uk-routing-prototype]: https://github.com/ukparliament/parliament.uk-routing-prototype
+[parliament.uk-routing]: https://github.com/ukparliament/parliament.uk-routing
 [parliamentary-digital-service]:   https://github.com/ukparliament
 [parliament.uk]:                   http://www.parliament.uk/
 [varnish]:                         http://www.varnish-cache.org/docs/2.1/index.html
