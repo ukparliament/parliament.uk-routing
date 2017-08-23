@@ -22,8 +22,18 @@ backend things {
 }
 
 sub vcl_recv {
-    if(req.url == "/" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes" || req.url ~ "^/cookie_policy") {
+    if(req.url == "/" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes" || req.url ~ "^/cookie_policy" || req.url ~ "^/find-your-constituency" || req.url ~ "^/who-should-i-contact-with-my-issue") {
         set req.backend_hint = utilities;
+    } else if(req.url ~ "places$") {
+        set req.backend_hint = lists;
+    } else if(req.url ~ "places(.xml|.json)$") {
+        set req.backend_hint = lists;
+    } else if(req.url ~ "places/regions$") {
+        set req.backend_hint = lists;
+    } else if(req.url ~ "places/regions(.xml|.json)$") {
+        set req.backend_hint = lists;
+    } else if(req.url ~ "^places/\w+/constituencies") {
+        set req.backend_hint = lists;
     } else if(req.url ~ "(people|constituencies|parties|parliaments|media|houses|contact_points)/\w{8}$") {
         set req.backend_hint = things;
     } else if(req.url ~ "(people|constituencies|parties|parliaments|media|houses|contact_points)/\w{8}(.xml|.json)$") {
@@ -39,6 +49,8 @@ sub vcl_recv {
     } else if(req.url ~ "(contituencies/map)$" || req.url ~ "(constituencies)/\w{8}/(map)$" || req.url ~ "(constituencies/current/map)$"){
         set req.backend_hint = things;
     } else if(req.url ~ "(contituencies/map(.json|.xml))$" || req.url ~ "(constituencies)/\w{8}/(map(.json|.xml))$" || req.url ~ "(constituencies/current/map(.json|.xml))$"){
+        set req.backend_hint = things;
+    } else if(req.url ~ "(places)/\w+$") {
         set req.backend_hint = things;
     } else if(req.url ~ "(.ico|.jpeg|.gif|.svg|.jpg|.png|.css|.js)$") {
         set req.backend_hint = utilities;
