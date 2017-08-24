@@ -32,7 +32,7 @@ sub vcl_recv {
         set req.backend_hint = lists;
     } else if(req.url ~ "places/regions(.xml|.json)$") {
         set req.backend_hint = lists;
-    } else if(req.url ~ "^places/\w+/constituencies") {
+    } else if(req.url ~ "^/places/\w+/constituencies") {
         set req.backend_hint = lists;
     } else if(req.url ~ "(people|constituencies|parties|parliaments|media|houses|contact_points)/\w{8}$") {
         set req.backend_hint = things;
