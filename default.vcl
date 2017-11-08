@@ -22,7 +22,7 @@ backend things {
 }
 
 sub vcl_recv {
-  if(req.url == "/" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes" || req.url ~ "^/cookie_policy" || req.url ~ "^/find-your-constituency" || req.url ~ "^/who-should-i-contact-with-my-issue") {
+  if(req.url == "/" || req.url == "/robots.txt" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes" || req.url ~ "^/cookie_policy" || req.url ~ "^/find-your-constituency" || req.url ~ "^/who-should-i-contact-with-my-issue") {
     set req.backend_hint = utilities;
   } else if(req.url == "^/people/a-z") {
     set req.backend_hint = lists;
