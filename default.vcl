@@ -132,6 +132,8 @@ sub vcl_recv {
     set req.backend_hint = things;
   } else if(req.url ~ "^/petition-a-hybrid-bill") {
     set req.backend_hint = things;
+  } else if(req.url ~ "/articles/\w{8}$") {
+    set req.backend_hint = things;
   } else {
     set req.backend_hint = lists;
   }
