@@ -1,0 +1,47 @@
+pipelines:
+  parliament.uk-routing:
+    group: main
+    label_template: "${COUNT}"
+    environment_variables:
+      ASSET_LOCATION_URL: https://s3-eu-west-1.amazonaws.com/web1live.pugin-website
+      STATIC_ASSET_LOCATION_URL: https://s3-eu-west-1.amazonaws.com/web1live.static-assets
+      RACK_ENV: development
+    materials:
+      parliament.uk-routing-git:
+        git: https://github.com/jammycakes/ukpds.parliament.uk-routing.git
+        branch: development
+        auto_update: true
+    stages:
+      - build:
+          jobs:
+            build:
+              tasks:
+                - exec:
+                    run_if: passed
+                    command: make
+                    arguments:
+                      - build
+                - exec:
+                    run_if: passed
+                    command: make
+                    arguments:
+                      - push
+                - exec:
+                    run_if: any
+                    command: make
+                    arguments:
+                      - rmi
+      - deploy:
+          jobs:
+            build:
+              tasks:
+                - exec:
+                    run_if: passed
+                    command: make
+                    arguments:
+                      - deploy-ecs
+
+environments:
+  Web.DEVCI:
+    pipelines:
+      - parliament.uk-routing
