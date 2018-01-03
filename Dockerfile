@@ -16,10 +16,12 @@ ARG THING_BACKEND_PORT=3000
 RUN apk update && \
     apk upgrade && \
     apk add varnish && \
+    apk add python3 && \
+    pip3 install boto3 && \
     mkdir /scripts
 
 ADD default.vcl /etc/varnish/default.vcl
-ADD start.sh /scripts/start.sh
+ADD scripts /scripts
 
 RUN chmod +x /scripts/start.sh && \
     chmod 777 /etc/varnish/default.vcl
