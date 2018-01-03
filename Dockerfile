@@ -2,15 +2,6 @@ FROM alpine:latest
 
 # Add command line argument variables used to cusomise the image at build-time.
 ARG VARNISH_PORT=80
-#ARG UTILITIES_BACKEND_IP=utilities
-ARG UTILITIES_BACKEND_IP=127.0.0.1
-ARG UTILITIES_BACKEND_PORT=3000
-#ARG LIST_BACKEND_IP=list
-ARG LIST_BACKEND_IP=127.0.0.2
-ARG LIST_BACKEND_PORT=3000
-#ARG THING_BACKEND_IP=thing
-ARG THING_BACKEND_IP=127.0.0.3
-ARG THING_BACKEND_PORT=3000
 
 # Install system and application dependencies.
 RUN apk update && \
@@ -18,21 +9,14 @@ RUN apk update && \
     apk add varnish && \
     apk add python3 && \
     pip3 install boto3 && \
-    mkdir /scripts
+    mkdir /scripts && \
+    mkdir /vcl
 
-ADD default.vcl /etc/varnish/default.vcl
+ADD vcl /vcl
 ADD scripts /scripts
 
 RUN chmod +x /scripts/start.sh && \
-    chmod 777 /etc/varnish/default.vcl
-
-ENV VARNISH_PORT $VARNISH_PORT
-ENV UTILITIES_BACKEND_IP $UTILITIES_BACKEND_IP
-ENV UTILITIES_BACKEND_PORT $UTILITIES_BACKEND_PORT
-ENV LIST_BACKEND_IP $LIST_BACKEND_IP
-ENV LIST_BACKEND_PORT $LIST_BACKEND_PORT
-ENV THING_BACKEND_IP $THING_BACKEND_IP
-ENV THING_BACKEND_PORT $THING_BACKEND_PORT
+    ln -s /vcl/default.vcl /etc/varnish/default.vcl
 
 ARG GIT_SHA=unknown
 ARG GIT_TAG=unknown

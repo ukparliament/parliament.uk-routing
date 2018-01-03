@@ -6,19 +6,10 @@ vcl 4.0;
 # Default backend definition.  Set this to point to your content
 # server.
 
-backend utilities {
-    .host = "${UTILITIES_BACKEND_IP}";
-    .port = "${UTILITIES_BACKEND_PORT}";
-}
+include "/vcl/backends.vcl";
 
-backend lists {
-    .host = "${LIST_BACKEND_IP}";
-    .port = "${LIST_BACKEND_PORT}";
-}
-
-backend things {
-    .host = "${THING_BACKEND_IP}";
-    .port = "${THING_BACKEND_PORT}";
+sub vcl_init {
+  call init_backends;
 }
 
 sub vcl_recv {

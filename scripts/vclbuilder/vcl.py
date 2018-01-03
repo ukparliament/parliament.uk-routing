@@ -64,7 +64,7 @@ class VclFile(object):
                 vcl.append(backend.get_vcl())
 
         vcl.append('')
-        vcl.append('sub init_directors {')
+        vcl.append('sub init_backends {')
 
         for director in self.directors.values():
             vcl.append(director.get_vcl())
