@@ -143,7 +143,7 @@ def list_tasks(cluster):
             name = name[12:]
         return name
 
-    return [
+    data = (
         {
             'group': task['group'],
             'service': get_service_name(task['group']),
@@ -157,4 +157,6 @@ def list_tasks(cluster):
         }
         for task in tasks
         if task['lastStatus'] == 'RUNNING'
-    ]
+    )
+
+    return [ item for item in data if item['service'] != 'routing' ]
