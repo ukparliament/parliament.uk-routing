@@ -148,6 +148,7 @@ def list_tasks(cluster):
             'group': task['group'],
             'service': get_service_name(task['group']),
             'ip': get_ec2_instance_by_container_instance_arn(task['containerInstanceArn'])['PrivateIpAddress'],
+            'status': task['lastStatus'],
             'ports': tuple((
                 networkBinding['hostPort']
                 for container in task['containers']
@@ -155,4 +156,5 @@ def list_tasks(cluster):
             ))
         }
         for task in tasks
+        if task['lastStatus'] == 'RUNNING'
     ]
