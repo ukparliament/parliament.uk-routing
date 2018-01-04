@@ -128,4 +128,6 @@ sub vcl_recv {
   } else {
     set req.backend_hint = lists;
   }
+
+  return (pass);
 }
