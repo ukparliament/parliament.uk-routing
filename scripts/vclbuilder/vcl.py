@@ -2,8 +2,8 @@ import os
 
 backend_vcl = """
 backend {0} {{
-    .host = "{1}"
-    .port = "{2}"
+    .host = "{1}";
+    .port = "{2}";
 }}
 """
 
