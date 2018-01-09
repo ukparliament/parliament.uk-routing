@@ -57,7 +57,10 @@ class VclFile(object):
         director.add_backend(data)
 
     def get_vcl(self):
-        vcl = []
+        vcl = [
+            'import directors;',
+            '',
+        ]
 
         for director in self.directors.values():
             for backend in director.backends:
