@@ -5,7 +5,6 @@ if [ -n "$LIST_BACKEND_IP" ]; then
     python3 /scripts/build-vcl.py > /vcl/backends.vcl
 else
     # Running in AWS
-    init_aws_ecr
     mkdir -p ~/.aws
     cat <<EOF > ~/.aws/config
 [default]
@@ -18,7 +17,7 @@ EOF
     env > /scripts/env
     tmpfile=$(mktemp)
     crontab -l > $tmpfile
-    echo "* * * * * env - $$(cat /scripts/env) /scripts/cron.sh 2>&1 | /usr/bin/logger -t reconfigure" >> $tmpfile
+    echo "* * * * * env - \$(cat /scripts/env) /scripts/cron.sh 2>&1 | /usr/bin/logger -t reconfigure" >> $tmpfile
     crontab $tmpfile
     rm $tmpfile
 fi
