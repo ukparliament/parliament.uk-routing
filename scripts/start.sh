@@ -13,6 +13,14 @@ region=eu-west-1
 EOF
     chmod -R go-rwx ~/.aws
     python3 /scripts/build-vcl.py -a > /vcl/backends.vcl
+
+    # Set up cron job
+    env > /scripts/env
+    tmpfile=$(mktemp)
+    crontab -l > $tmpfile
+    echo "* * * * * env - `cat /scripts/env` /scripts/cron.sh"
+    crontab $tmpfile
+    rm $tmpfile
 fi
 
 mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
