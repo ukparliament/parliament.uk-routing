@@ -18,7 +18,7 @@ EOF
     env > /scripts/env
     tmpfile=$(mktemp)
     crontab -l > $tmpfile
-    echo "* * * * * env - `cat /scripts/env` /scripts/cron.sh"
+    echo "* * * * * env - `cat /scripts/env` /scripts/cron.sh" >> $tmpfile
     crontab $tmpfile
     rm $tmpfile
 fi
