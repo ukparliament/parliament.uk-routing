@@ -20,6 +20,7 @@ EOF
     echo "* * * * * env - \$(cat /scripts/env) /scripts/cron.sh 2>&1 | /usr/bin/logger -t reconfigure" >> $tmpfile
     crontab $tmpfile
     rm $tmpfile
+    crond
 fi
 
 mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
