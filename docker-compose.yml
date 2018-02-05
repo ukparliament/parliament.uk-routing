@@ -9,14 +9,15 @@ services:
     environment:
       - UTILITIES_BACKEND_IP=utilities.parliament.local
       - UTILITIES_BACKEND_PORT=3000
-      - LIST_BACKEND_IP=list.parliament.local
+      - LIST_BACKEND_IP=lists.parliament.local
       - LIST_BACKEND_PORT=3000
-      - THING_BACKEND_IP=thing.parliament.local
+      - THING_BACKEND_IP=things.parliament.local
       - THING_BACKEND_PORT=3000
     depends_on:
       - utilities.parliament.local
-      - list.parliament.local
-      - thing.parliament.local
+      - lists.parliament.local
+      - things.parliament.local
+      - api.parliament.local
 
   utilities.parliament.local:
     build:
@@ -32,16 +33,19 @@ services:
       - '3000:3000'
     environment:
       - PARLIAMENT_BASE_URL
-      - PARLIAMENT_AUTH_KEY
+      - PARLIAMENT_AUTH_TOKEN
       - OPENSEARCH_DESCRIPTION_URL
       - OPENSEARCH_AUTH_TOKEN
       - IMAGE_SERVICE_URL
       - BANDIERA_URL
       - ASSET_LOCATION_URL
       - GTM_KEY
+      - SECRET_KEY_BASE
       - RACK_ENV=development
+    depends_on:
+      - api.parliament.local
 
-  list.parliament.local:
+  lists.parliament.local:
     build:
       context: ../parliament.uk-lists/
       args:
@@ -55,14 +59,17 @@ services:
       - '3010:3000'
     environment:
       - PARLIAMENT_BASE_URL
-      - PARLIAMENT_AUTH_KEY
+      - PARLIAMENT_AUTH_TOKEN
       - IMAGE_SERVICE_URL
       - BANDIERA_URL
       - ASSET_LOCATION_URL
       - GTM_KEY
+      - SECRET_KEY_BASE
       - RACK_ENV=development
+    depends_on:
+      - api.parliament.local
 
-  thing.parliament.local:
+  things.parliament.local:
     build:
       context: ../parliament.uk-things/
       args:
@@ -76,9 +83,18 @@ services:
       - '3020:3000'
     environment:
       - PARLIAMENT_BASE_URL
-      - PARLIAMENT_AUTH_KEY
+      - PARLIAMENT_AUTH_TOKEN
       - IMAGE_SERVICE_URL
       - BANDIERA_URL
       - ASSET_LOCATION_URL
       - GTM_KEY
+      - SECRET_KEY_BASE
       - RACK_ENV=development
+    depends_on:
+      - api.parliament.local
+
+  api.parliament.local:
+    build:
+      context: ../parliament.uk-static-api
+    ports:
+      - '3030:5000'

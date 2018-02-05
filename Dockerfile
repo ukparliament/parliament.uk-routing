@@ -12,6 +12,7 @@ RUN apk update && \
     mkdir /scripts && \
     mkdir /vcl
 
+
 ADD vcl /vcl
 ADD scripts /scripts
 
