@@ -16,6 +16,7 @@ ARG THING_BACKEND_PORT=3000
 RUN apk update && \
     apk upgrade && \
     apk add varnish && \
+    apk add yarn && \
     mkdir /scripts
 
 ADD default.vcl /etc/varnish/default.vcl
