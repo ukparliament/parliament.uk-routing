@@ -8,7 +8,7 @@ pipelines:
       RACK_ENV: development
     materials:
       parliament.uk-routing-git:
-        git: https://github.com/jammycakes/ukpds.parliament.uk-routing.git
+        git: https://github.com/ukparliament/parliament.uk-routing.git
         branch: development
         auto_update: true
     stages:
