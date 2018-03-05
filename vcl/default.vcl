@@ -25,7 +25,7 @@ sub vcl_recv {
     set req.backend_hint = things.backend();
   } else if(req.url ~ "(parliaments)/\w{8}/(previous|next)(\..*)?$" || req.url ~ "(parliaments/(current|next|previous)(\..*)?)$") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "(constituencies/map)(/..*)?$" || req.url ~ "(constituencies)/\w{8}/(map)(/..*)?$" || req.url ~ "(constituencies/current/map)(/..*)?)$"){
+  } else if(req.url ~ "(constituencies/map)(\..*)?$" || req.url ~ "(constituencies)/\w{8}/(map)(\..*)?$" || req.url ~ "(constituencies/current/map)(\..*)?)$"){
     set req.backend_hint = things.backend();
   } else if(req.url ~ "(.ico|.jpeg|.gif|.svg|.jpg|.png|.css|.js)$") {
     set req.backend_hint = utilities.backend();
