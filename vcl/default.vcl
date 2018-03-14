@@ -33,9 +33,20 @@ sub vcl_recv {
     set req.backend_hint = lists.backend();
   } else if(req.url ~ "/places/(E|S|W)\w{8}$") {
     set req.backend_hint = things.backend();
+  } else if(req.url == "/health-check") {
+    return(synth(853, "OK"));
   } else {
     set req.backend_hint = lists.backend();
   }
 
   return (pass);
+}
+
+sub vcl_synth {
+  if (resp.status == 853) {
+    set resp.status = 200;
+    set resp.http.Content-Type = "text/plain";
+    synthetic("OK");
+    return(deliver);
+  }
 }
