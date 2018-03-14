@@ -3,16 +3,37 @@ import directors;
 backend lists_server {
     .host = "$LIST_BACKEND_IP";
     .port = "$LIST_BACKEND_PORT";
+    .probe = {
+        .url = "/";
+        .timeout = 1s;
+        .interval = 5s;
+        .window = 5;
+        .threshold = 3;
+    }
 }
 
 backend things_server {
     .host = "$THING_BACKEND_IP";
     .port = "$THING_BACKEND_PORT";
+    .probe = {
+        .url = "/";
+        .timeout = 1s;
+        .interval = 5s;
+        .window = 5;
+        .threshold = 3;
+    }
 }
 
 backend utilities_server {
     .host = "$UTILITIES_BACKEND_IP";
     .port = "$UTILITIES_BACKEND_PORT";
+    .probe = {
+        .url = "/";
+        .timeout = 1s;
+        .interval = 5s;
+        .window = 5;
+        .threshold = 3;
+    }
 }
 
 sub init_backends {
