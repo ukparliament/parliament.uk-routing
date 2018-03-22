@@ -4,21 +4,36 @@ backend_vcl = """
 backend {0} {{
     .host = "{1}";
     .port = "{2}";
+    .probe = {{
+        .url = "{3}";
+        .timeout = 1s;
+        .interval = 30s;
+        .window = 3;
+        .threshold = 2;
+    }}
 }}
 """
+
+probe_urls = {
+    "lists": "/",
+    "things": "/",
+    "utilities": "/",
+    "bandiera": None
+}
 
 
 class Backend(object):
 
-    def __init__(self, name, data):
+    def __init__(self, name, data, url):
         self.name = name
         self.ip = data['ip']
         self.ports = data['ports']
+        self.url = url
 
     def get_vcl(self):
         vcl = ''
         for port in self.ports:
-            vcl += backend_vcl.format(self.name, self.ip, port)
+            vcl += backend_vcl.format(self.name, self.ip, port, self.url)
         return vcl
 
 
@@ -31,8 +46,10 @@ class Director(object):
     def add_backend(self, data):
         index = len(self.backends) + 1
         backend_name = self.name + '_' + str(index)
-        backend = Backend(backend_name, data)
-        self.backends.append(backend)
+        url = probe_urls.get(self.name, '/')
+        if url:
+            backend = Backend(backend_name, data, url)
+            self.backends.append(backend)
 
     def get_vcl(self):
         vcl = []
