@@ -17,7 +17,7 @@ backend {0} {{
 probe_urls = {
     "lists": "/",
     "things": "/",
-    "utilities": "/",
+    "utilities": "/robots.txt",
     "bandiera": None
 }
 
