@@ -1,12 +1,34 @@
 #! /usr/bin/env python3
 
+import json
+import os
+import re
 import sys
+import urllib.request
+
+
+def get_cluster_name():
+    # Get the IP address of the container
+    f = os.popen('ip route show')
+    data = f.read()
+    f.close()
+    lines = data.splitlines()
+    expr = r'(?:\d+\.){3}\d+'
+    match = re.search(expr, lines[0])
+    ipaddr = match.group()
+    # Now get the container instance metadata
+    url = 'http://{0}:51678/v1/metadata'.format(ipaddr)
+    req = urllib.request.Request(url)
+    resp = urllib.request.urlopen(req).read()
+    data = json.loads(resp.decode('utf-8'))
+    return data['Cluster']
 
 def get_vcl_aws():
     from vclbuilder.tasks import list_tasks
     from vclbuilder.vcl import VclFile
 
-    tasks = list_tasks('ecs')
+    cluster = get_cluster_name()
+    tasks = list_tasks(cluster)
     vclfile = VclFile()
     for task in tasks:
         vclfile.add_backend(task)
