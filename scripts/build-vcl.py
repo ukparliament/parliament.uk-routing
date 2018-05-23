@@ -6,6 +6,8 @@ import re
 import sys
 import urllib.request
 
+# Set this to False if you want to use Varnish for load balancing
+USE_ALBS = True
 
 def get_cluster_name():
     # Get the IP address of the container
@@ -24,16 +26,20 @@ def get_cluster_name():
     return data['Cluster']
 
 def get_vcl_aws():
-    from vclbuilder.tasks import list_tasks
-    from vclbuilder.vcl import VclFile
+    tasks = []
+    if USE_ALBS:
+        from vclbuilder.albs import list_tasks
+        tasks = list_tasks()
+    if not tasks:
+        from vclbuilder.tasks import list_tasks
+        cluster = get_cluster_name()
+        tasks = list_tasks(cluster)
 
-    cluster = get_cluster_name()
-    tasks = list_tasks(cluster)
+    from vclbuilder.vcl import VclFile
     vclfile = VclFile()
     for task in tasks:
         vclfile.add_backend(task)
     return vclfile.get_vcl()
-
 
 def get_vcl_docker():
     import os
@@ -44,7 +50,6 @@ def get_vcl_docker():
         txt = f.read()
     tpl = Template(txt)
     return tpl.substitute(os.environ)
-
 
 def get_vcl(is_aws):
     if is_aws:
