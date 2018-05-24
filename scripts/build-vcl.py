@@ -7,7 +7,7 @@ import sys
 import urllib.request
 
 # Set this to False if you want to use Varnish for load balancing
-USE_ALBS = False
+USE_ALBS = True
 
 def get_cluster_name():
     # Get the IP address of the container
