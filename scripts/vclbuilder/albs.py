@@ -1,4 +1,5 @@
 import boto3
+import socket
 
 elb2 = boto3.client('elbv2')
 
@@ -10,6 +11,9 @@ def resources_with_tags_as_dict(resources):
         res['ResourceArn']: tags_as_dict(res['Tags'])
         for res in resources
     }
+
+def resolve(hostname):
+    return socket.gethostbyname_ex(hostname)[2]
 
 def list_tasks(*args, **kwargs):
     lbdata = elb2.describe_load_balancers()
@@ -24,10 +28,12 @@ def list_tasks(*args, **kwargs):
     backends = [
         {
             'service': resource_tags[arn]['varnish_backend'],
-            'ip': load_balancers_by_arn[arn]['DNSName'],
+            'ip': ip,
             'ports': [ 80, ]
         }
         for arn in resource_tags
+        for ip in resolve(load_balancers_by_arn[arn]['DNSName'])
         if 'varnish_backend' in resource_tags[arn]
     ]
     return backends
+
