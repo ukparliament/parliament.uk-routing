@@ -6,8 +6,7 @@ ARG VARNISH_PORT=80
 # Install system and application dependencies.
 RUN apk update && \
     apk upgrade && \
-    apk add varnish && \
-    apk add python3 && \
+    apk add varnish varnish-dev curl make python3 && \
     pip3 install boto3 && \
     mkdir /scripts && \
     mkdir /vcl
@@ -18,6 +17,13 @@ ADD scripts /scripts
 
 RUN chmod +x /scripts/start.sh && \
     ln -s /vcl/default.vcl /etc/varnish/default.vcl
+
+RUN curl -O https://download.varnish-software.com/varnish-modules/varnish-modules-0.15.0.tar.gz && \
+    tar -xvzf varnish-modules-0.15.0.tar.gz && \
+    cd varnish-modules-0.15.0 && \
+    ./configure && \
+    make && \
+    make install
 
 ENV VARNISH_PORT $VARNISH_PORT
 ENV UTILITIES_BACKEND_IP $UTILITIES_BACKEND_IP

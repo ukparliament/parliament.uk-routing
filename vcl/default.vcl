@@ -6,6 +6,8 @@ vcl 4.0;
 # Default backend definition.  Set this to point to your content
 # server.
 
+import var;
+
 include "/vcl/backends.vcl";
 
 sub vcl_init {
@@ -13,27 +15,30 @@ sub vcl_init {
 }
 
 sub vcl_recv {
-  if(req.url == "/" || req.url == "/robots.txt" || req.url ~ "^/resource" || req.url ~ "^/mps" || req.url ~ "^/meta" || req.url ~ "^/search" || req.url ~ "^/postcodes" || req.url ~ "^/cookie_policy" || req.url ~ "^/find-your-constituency" || req.url ~ "^/who-should-i-contact-with-my-issue" || req.url ~ "^/statutory-instruments") {
+  # We want to route our URLs, ignoring query string values. We use var.get("url") for comparison, rather than req.url.
+  var.set("url", regsub(req.url, "\?.*", ""));
+
+  if(var.get("url") == "/" || var.get("url") == "/robots.txt" || var.get("url") ~ "^/resource" || var.get("url") ~ "^/mps" || var.get("url") ~ "^/meta" || var.get("url") ~ "^/search" || var.get("url") ~ "^/postcodes" || var.get("url") ~ "^/cookie_policy" || var.get("url") ~ "^/find-your-constituency" || var.get("url") ~ "^/who-should-i-contact-with-my-issue" || var.get("url") ~ "^/statutory-instruments") {
     set req.backend_hint = utilities.backend();
-  } else if(req.url ~ "(people|constituencies|parties|parliaments|media|houses|contact-points|media|articles|groups|concepts|collections|questions|procedures|work-packages)/\w{8}(\..*)?$") {
+  } else if(var.get("url") ~ "(people|constituencies|parties|parliaments|media|houses|contact-points|media|articles|groups|concepts|collections|questions|procedures|work-packages)/\w{8}(\..*)?$") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "^/petition-a-hybrid-bill") {
+  } else if(var.get("url") ~ "^/petition-a-hybrid-bill") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "^/(people|constituencies|parties|parliaments|media|houses|contact-points|media|articles|groups)/lookup") {
+  } else if(var.get("url") ~ "^/(people|constituencies|parties|parliaments|media|houses|contact-points|media|articles|groups)/lookup") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "^/constituencies/postcode_lookup" || req.url ~ "^/people/postcode_lookup") {
+  } else if(var.get("url") ~ "^/constituencies/postcode_lookup" || var.get("url") ~ "^/people/postcode_lookup") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "(parliaments)/\w{8}/(previous|next)(\..*)?$" || req.url ~ "(parliaments/(current|next|previous)(\..*)?)$") {
+  } else if(var.get("url") ~ "(parliaments)/\w{8}/(previous|next)(\..*)?$" || var.get("url") ~ "(parliaments/(current|next|previous)(\..*)?)$") {
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "(constituencies/map)(\..*)?$" || req.url ~ "(constituencies)/\w{8}/(map)(\..*)?$" || req.url ~ "constituencies/current/map(\..*)?$"){
+  } else if(var.get("url") ~ "(constituencies/map)(\..*)?$" || var.get("url") ~ "(constituencies)/\w{8}/(map)(\..*)?$" || var.get("url") ~ "constituencies/current/map(\..*)?$"){
     set req.backend_hint = things.backend();
-  } else if(req.url ~ "(.ico|.jpeg|.gif|.svg|.jpg|.png|.css|.js)$") {
+  } else if(var.get("url") ~ "(.ico|.jpeg|.gif|.svg|.jpg|.png|.css|.js)$") {
     set req.backend_hint = utilities.backend();
-  } else if(req.url ~ "/places$" || req.url ~ "^/places/regions" || req.url ~ "places/\w+/constituencies$") {
+  } else if(var.get("url") ~ "/places$" || var.get("url") ~ "^/places/regions" || var.get("url") ~ "places/\w+/constituencies$") {
     set req.backend_hint = lists.backend();
-  } else if(req.url ~ "/places/(E|S|W)\w{8}$") {
+  } else if(var.get("url") ~ "/places/(E|S|W)\w{8}$") {
     set req.backend_hint = things.backend();
-  } else if(req.url == "/health-check") {
+  } else if(var.get("url") == "/health-check") {
     return(synth(853, "OK"));
   } else {
     set req.backend_hint = lists.backend();
