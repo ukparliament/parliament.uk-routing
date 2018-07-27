@@ -48,4 +48,4 @@ export LOG_FORMAT='{
     "xf_proto":"%{X-Forwarded-Proto}i"
 }'
 
-exec /usr/bin/varnishncsa -a -F "$LOG_FORMAT"
+# exec /usr/bin/varnishncsa -a -F "$LOG_FORMAT"
