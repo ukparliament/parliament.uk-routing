@@ -30,24 +30,22 @@ varnishd -f /etc/varnish/default.vcl -s malloc,100M -a 0.0.0.0:${VARNISH_PORT}
 
 export LOG_FORMAT='{
     "@timestamp": "%{%Y-%m-%dT%H:%M:%S%z}t",
-    "@fields": {
-      "remoteip":"%h",
-      "xforwardedfor":"%{X-Forwarded-For}i",
-      "method":"%m",
-      "url":"%U",
-      "request":"%r",
-      "httpversion":"%H",
-      "status": %s,
-      "bytes": %b,
-      "referrer":"%{Referer}i",
-      "agent":"%{User-agent}i",
-      "berespms" : "%{Varnish:time_firstbyte}x",
-      "duration_usec": %D,
-      "cache" : "%{Varnish:handling}x",
-      "served_by":"%{Served-By}o",
-      "accept_encoding":"%{Accept-Encoding}i",
-      "xf_proto":"%{X-Forwarded-Proto}i",
-    }
+    "remoteip":"%h",
+    "xforwardedfor":"%{X-Forwarded-For}i",
+    "method":"%m",
+    "url":"%U",
+    "request":"%r",
+    "httpversion":"%H",
+    "status": %s,
+    "bytes": %b,
+    "referrer":"%{Referer}i",
+    "agent":"%{User-agent}i",
+    "berespms" : "%{Varnish:time_firstbyte}x",
+    "duration_usec": %D,
+    "cache" : "%{Varnish:handling}x",
+    "served_by":"%{Served-By}o",
+    "accept_encoding":"%{Accept-Encoding}i",
+    "xf_proto":"%{X-Forwarded-Proto}i"
 }'
 
 exec /usr/bin/varnishncsa -a -F "$LOG_FORMAT"
