@@ -18,7 +18,7 @@ sub vcl_recv {
   # We want to route our URLs, ignoring query string values. We use var.get("url") for comparison, rather than req.url.
   var.set("url", regsub(req.url, "\?.*", ""));
 
-  if(var.get("url") == "/" || var.get("url") == "/robots.txt" || var.get("url") ~ "^/resource" || var.get("url") ~ "^/mps" || var.get("url") ~ "^/meta" || var.get("url") ~ "^/search" || var.get("url") ~ "^/postcodes" || var.get("url") ~ "^/cookie_policy" || var.get("url") ~ "^/find-your-constituency" || var.get("url") ~ "^/who-should-i-contact-with-my-issue" || var.get("url") ~ "^/statutory-instruments") {
+  if(var.get("url") == "/" || var.get("url") == "/robots.txt" || var.get("url") ~ "^/resource" || var.get("url") ~ "^/mps" || var.get("url") ~ "^/meta" || var.get("url") ~ "^/search" || var.get("url") ~ "^/postcodes" || var.get("url") ~ "^/cookie_policy" || var.get("url") ~ "^/find-your-constituency" || var.get("url") ~ "^/find-a-statutory-instrument" || var.get("url") ~ "^/who-should-i-contact-with-my-issue" || var.get("url") ~ "^/statutory-instruments") {
     set req.backend_hint = utilities.backend();
   } else if(var.get("url") ~ "(people|constituencies|parties|parliaments|media|houses|contact-points|media|articles|groups|concepts|collections|questions|procedures|work-packages)/\w{8}(\..*)?$") {
     set req.backend_hint = things.backend();
