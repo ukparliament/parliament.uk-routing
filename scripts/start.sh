@@ -28,7 +28,7 @@ mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
 # Start varnish and log
 varnishd -f /etc/varnish/default.vcl -s malloc,100M -a 0.0.0.0:${VARNISH_PORT}
 
-export LOG_FORMAT='{
+export LOG_FORMAT='"{
     "@timestamp": "%{%Y-%m-%dT%H:%M:%S%z}t",
     "remoteip":"%h",
     "xforwardedfor":"%{X-Forwarded-For}i",
@@ -46,6 +46,6 @@ export LOG_FORMAT='{
     "served_by":"%{Served-By}o",
     "accept_encoding":"%{Accept-Encoding}i",
     "xf_proto":"%{X-Forwarded-Proto}i"
-}'
+}"'
 
 exec /usr/bin/varnishncsa -a -F "$LOG_FORMAT"
