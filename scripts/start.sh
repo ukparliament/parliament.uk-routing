@@ -29,7 +29,7 @@ mkdir -p /var/lib/varnish/`hostname` && chown nobody /var/lib/varnish/`hostname`
 varnishd -f /etc/varnish/default.vcl -s malloc,100M -a 0.0.0.0:${VARNISH_PORT}
 
 export LOG_FORMAT='{
-    "@timestamp": "%{%Y-%m-%dT%H:%M:%S:%z}t",
+    "@timestamp": "%{%Y-%m-%dT%H:%M:%S}t",
     "remoteip":"%h",
     "xforwardedfor":"%{X-Forwarded-For}i",
     "method":"%m",
