@@ -48,6 +48,6 @@ pipelines:
                       - deploy-ecs
 
 environments:
-  Web.LIVE:
+  WebLIVE:
     pipelines:
       - parliament.uk-routing
